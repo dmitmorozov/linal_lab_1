@@ -6,9 +6,9 @@ def det_minor(matrix: tp.List[tp.List[int]]) -> int:
     :return: Определитель заданной матрицы
     """
     n = len(matrix)
-    if n == 1:
+    if n == 1: #матрица из одного элемента
         return matrix[0][0]
-    if n == 2:
+    if n == 2: #матрица 2х2
         return (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0])
 
     det = 0
@@ -29,16 +29,16 @@ def det_triangle(matrix: tp.List[tp.List[int]], i, n, sgn) -> int:
     :return: Определитель заданной матрицы
     """
     if i < n - 1:
-        if matrix[i][i] != 0:
+        if matrix[i][i] != 0: # если строка начинается не с 0
             for j in range(i + 1, n):
                 c = matrix[j][i] / matrix[i][i]
                 for k in range(i, n):
                     matrix[j][k] -= matrix[i][k] * c
             return det_triangle(matrix, i + 1, n, sgn)
         else:
-            for j in range(i + 1, n):
+            for j in range(i + 1, n): #поиск строки, где i-ый эл-т !=0
                 if matrix[j][i] != 0:
-                    matrix[i], matrix[j] = matrix[j], matrix[i]
+                    matrix[i], matrix[j] = matrix[j], matrix[i] #меняем строки местами
                     return det_triangle(matrix, i, n, sgn * (-1))
             else:
                 return 0
@@ -65,7 +65,7 @@ def determinant(matrix = [], method: str = 'minor') -> tp.Optional[int]:
     :return: Определитель введённой матрицы, если её размер nxn. Иначе None
     """
     is_square = True
-    if not matrix:
+    if not matrix: #если матрица вводится с клавиатуры
         n = int(input())
         for i in range(n):
             row = [int(j) for j in input().split()]
@@ -73,18 +73,18 @@ def determinant(matrix = [], method: str = 'minor') -> tp.Optional[int]:
                 matrix.append(row)
             else:
                 is_square = False
-    else:
+    else: #если матрица уже задана
         size = len(matrix)
         for i in range(size):
             if len(matrix[i]) != size:
                 is_square = False
-    if is_square:
-        if method == 'minor':
+    if is_square: #если матрица квадратная
+        if method == 'minor': #определитель через разложение по строки
             det = det_minor(matrix)
             print(det)
             print(inverse_matrix(det))
             return det
-        elif method == 'triangle':
+        elif method == 'triangle': #определитель через треугольную матрицу
             det = det_triangle(matrix, 0, len(matrix), 1)
             print(det)
             print(inverse_matrix(det))
